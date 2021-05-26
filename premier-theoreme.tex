@@ -1,0 +1,217 @@
+\documentclass{report}[12pt]
+
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+\usepackage[latin1]{inputenc} % un package
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{floatrow}
+\usepackage{enumitem}
+\usepackage[all]{xy}
+
+
+\newcommand\tab[1][0.5cm]{\hspace*{#1}}
+
+\newtheoremstyle{break}
+  {20pt}% measure of space to leave above the theorem. E.g.: 3pt
+  {20pt}% measure of space to leavebelow the theorem. E.g.: 3pt
+  {\itshape}% name of font to use in the body of the theorem
+  {20pt}% measure of space to indent
+  {\bfseries}% name of head font
+  {}% punctuation between head and body
+  {\newline}% space after theorem head; " " = normal interword space
+  {}
+\theoremstyle{break}
+\newtheorem{lemma}{Lemme}[section]
+\newtheorem{corollaire}{Corollaire}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{theorem}{Theorème}[section]
+\newtheorem{definition}{Définition}[section]
+\newtheorem{example}{Exemple}[section]
+\newtheorem{exo}{Exercice}[section]
+\theoremstyle{plain}
+\newtheorem{remark}{Remarque}[section]
+
+\title{Construction d'une quasi-géodésique sur un polyèdre convexe}
+\author{Jean Chartier}
+%\date{}
+\begin{document}
+\maketitle
+
+
+
+En 1949, Alexandre Pogorelov démontre l'existence d'une quasi-géodésique simple et fermée sur tout polyèdre convexe\footnote{Nous donnons en annexe la preuve qu'il n'existe pas toujours de quasi-géodésique déterministe sur un polyèdre convexe, c'est-à-dire le cas échéant, qui traverse les sommets en formant deux angles égaux.}. Nous nous proposons de décrire un algorithme permettant de construire à la surface (homéomorphe à la sphère) de tout polyèdre (convexe ou non), une telle quasi-géodésique. Nous démontrons d'abord l'existence d'une quasi-géodésique de longueur inférieure à une borne dépendant du polyèdre. Cela nous donne une borne supérieure sur la combinatoire de la quasi-géodésique (ordre de rencontre des sommets et arêtes) et nous permet de dresser une liste des chemins à tester. 
+\begin{definition}[Quasi-géodésique]
+Une quasi-géodésique sur un polyèdre $P$ quelconque est un chemin continu $\gamma : I\longrightarrow \partial P$, où $I$ est un intervalle de $\mathbb{R}$, satisfaisant quatre conditions :
+\begin{itemize}
+\item{Il est rectiligne uniforme sur les faces de $P$ qu'il traverse.}
+\item{Il forme au passage d'une arête deux angles égaux à $\pi$.}
+\item{Il forme au passage d'un sommet de courbure positive deux angles inférieurs ou égaux à $\pi$.}
+\item{Il forme au passage d'un sommet de courbure négative deux angles supérieurs ou égaux à $\pi$.}
+\end{itemize}
+\end{definition}
+
+\textbf{Notation} : Étant donné un polyèdre $P$, on notera $p_1,\dots,p_n$ ses $n$ sommets et $a_1,\dots,a_m$ ses $m$ arêtes, avec une notation alternative pour les arêtes reliant $p_i$ et $p_j$, à savoir $a_{ij}$. On appelle \textit{chapeau} de sommet $p_i$, noté $\mathcal{C}_i$, la réunion des faces de $P$ attachées en $p_i$.
+
+\begin{theorem}[Théorème 1]
+Soit $P$ un polyèdre quelconque. Il existe une quasi-géodésique simple et fermée $\gamma : S^1\longrightarrow \partial P$ dont la longueur n'excède pas $M=\sum_i L(a_i)$.
+%$M=\epsilon + \underset {(a,b,c)\pm P}{min}\; \underset{t\in \mathbb{R}}{max}\; L\left( \partial P\cap \{(x,y,z)\in \mathbb{R}^3 | ax+by+cz=t\}\right)$.\\
+On peut demander en outre, quitte à faire glisser parallèlement $\gamma$ le long des arêtes qu'elle traverse, que $0$ soit envoyé sur un sommet $p_{\star}$.
+\end{theorem}
+\begin{proof}
+Nous savons depuis [ref] que les 2-sphères sont décortiquables (shellable). En particulier, étant donné un polyèdre $P$, il existe un ordre sur l'ensemble de ses faces $\{F_1,\dots,F_p\}$ tel que : $$\forall i=1\dots p, \bigcup_{k=1}^{k=i}F_k\simeq D^2 \text{ et }\bigcup_{k=1}^{k=p}F_k\simeq S^2$$
+On considère un balayage $\mathcal{B}:S^2\longrightarrow P$ de degré 1 -- où $S^2$ est vue comme le quotient du cylindre $[0,1]\times S^1$ par la relation qui identifie les cercles $(0, S^1)$ et $(1,S^1)$ à deux points -- qui satisfait :
+\begin{itemize}
+\item{Chaque fibre $\mathcal{B}(s,.):S^1\longrightarrow P$ est une ligne brisée simple à la surface de $P$.}
+\item{Il existe une suite de valeurs : $0<s_1<\dots<s_{p-1}<1$ telle que $\mathcal{B}([0,s_i]\times S^1)=\bigcup_{k=1}^{k=i}F_k$.}
+\end{itemize}
+\end{proof}
+
+
+\begin{theorem}[Théorème 2]
+Il existe un algorithme permettant de construire une telle quasi-géodésique.
+\end{theorem}
+\begin{proof}[Preuve du Théorème 2]
+Soit $\mathcal{E}=\{p_1,\dots,p_n,a_1,\dots,a_m\}$ l'ensemble des sommets et arêtes ouvertes de $P$. À une courbe simple $c:I\longrightarrow P$, on associe le mot $\mathcal{E}(c)$ composé des éléments ordonnés de $\mathcal{E}$ rencontrés par $c(t)$ quand $t$ parcourt $I$. On veut donner une borne $\eta$ sur la combinatoire de $\gamma$, c'est-à-dire une borne sur la longueur de $\mathcal{E}(\gamma)$. À chaque arête $a_{ij}$, on associe un coefficient de rencontre $k(a_{ij})$ mesuré comme suit :
+
+$$k(a_{ij})=\underset {\begin{matrix}A\in a_{ij}\\B\in \partial(\mathcal{C}_i\cup\mathcal{C}_j)\end{matrix}}{max}\frac{\#([AB], \mathcal{E})-1}{L(AB)}$$
+Où $[AB]$ est le plus court chemin sur $P$ entre $A$ et $B$ et où $\#([AB], \mathcal{E})$ désigne le nombre d'éléments de $\mathcal{E}$ rencontrés par $[AB]$, transversalement ou longitudinalement s'il s'agit d'une arête. %Notons que $[AB]$ est une quasi-géodésique qui ne passe par aucun sommet, si ce n'est éventuellement en $A$ ou $B$. En effet, le plus court chemin entre deux points qui ne sont pas des sommets évite toujours ces derniers. Ainsi, il existe un patron local de $P$ sur lequel $[AB]$ est développé en segment.  \\
+
+\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[scale=0.29]{coeff-de-rencontre}  
+		\end{center}
+\end{figure}
+
+{\setlength{\parindent}{0pt}On a alors une expression de $\eta$ :}
+
+$$\eta=\left\lceil M\;.\;\underset{a_{ij}}{max}\;k(a_{ij}) \right\rceil$$
+
+
+\tab
+
+
+{\setlength{\parindent}{0pt}On considère l'ensemble\footnote{De cardinal $n(n+m)^{\eta-1}$} des mots de $\eta+1$ lettres prises dans $\mathcal{E}$, commençants et terminants par un même nom de sommet, noté $p_{\star}$. Un mot \textit{valide} ne doit contenir que deux types de syllabes :}
+\begin{itemize}
+\item{Deux lettres désignant deux éléments au bord d'une même unique face de $P$, notée $F(\square _i,\square _j)$.}
+\item{Trois lettres désignant une arêtes comprise entre ses deux extrémités.\\}
+\end{itemize}
+À $\gamma$ correspond nécessairement un tel mot, noté $\overline{\gamma}$. Réciproquement, à un mot $x=\overline{p_{\star}l_1\dots l_{\eta-1}p_{\star}}$ correspond une quasi-géodésique simple et fermée s'il satisfait, de gauche à droite, le test suivant :
+\begin{itemize}
+\item{Premier cas : deux sommets $p_i$ et $p_j$ se suivent dans $x$. On enregistre le tracé $[p_i,p_j]$ à travers $F(p_i,p_j)$.}
+\item{Deuxième cas : la séquence $\overline{p_ia_{ij}p_j}$ a lieu dans $x$. On enregistre le tracé $[p_i,p_j]$ le long de $a_{ij}$.}
+\item{Troisième cas : deux sommets $p_i$ et $p_j$ cernent une suite $\overline{a_{i_1}\dots a_{i_k}}$ dans $x$. On développe successivement les faces adjacentes $F(p_i,a_{i_1})$, $F(a_{i_1},a_{i_2})$, $\dots$, $F(a_{i_k},p_j)$. 
+
+
+%en vérifiant à chaque étape que le cône lumineux issu de $p_i$ rencontre les $a_i$ (voir figure ci-dessous). Si le dernier cône rencontre $p_j$, on enregistre le tracé $[p_i,p_j]$ à travers le développement des faces, vu comme une quasi-géodésique sur $P$. Attention : dans le cas non convexe, la construction peut échouer dès la première face.
+} 
+\end{itemize}
+Dans les trois cas :
+\begin{itemize}
+
+\item{Si $p_i=p_{\star}$, on continue le test à partir de $p_j$.}
+\item{Si $p_i\neq p_{\star}$, alors des tracés en aval et en amont de $p_i$ on été enregistrés. Le test est positif si l'angle en $p_i$ formé par ces deux tracés satisfait aux conditions d'une quasi-géodésique.}
+\item{Si $p_j=p_{\star}$, alors des tracés en aval et en amont de $p_{\star}$ on été enregistrés. Le test est positif si l'angle en $p_{\star}$ formé par ces deux tracés satisfait aux conditions d'une quasi-géodésique.}
+
+
+\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[scale=0.29]{test}  
+		\end{center}
+\end{figure}
+
+
+
+%mesure les deux angles $(\overrightarrow{p_jp_0},\overrightarrow{p_jp_{k_1}})$ et $(\overrightarrow{p_jp_0},\overrightarrow{p_jp_{k_1}})$ où $p_{k_1}$ et $p_{k_2}$ sont les sommets voisins de $p_j$ dans $F(p_0,p_j)$.}
+
+\end{itemize}
+L'un au moins des mots valides doit passer le test avec succès, à commencer par $\overline{\gamma}$.\\
+Ainsi, \textbf{le test fournit la construction d'une quasi-géodésique sur $P$}.\\ \\ \\ \\ \\ \\ \\
+\end{proof}
+
+
+Soit $P$ un polyèdre convexe de sommets $p_i$. On note $a_{ij}$ l'arête qui joint $p_i$ et $p_j$ quand elle existe. On considère un recouvrement de $P$ par ses \textit{chapeaux}. Un chapeau $\mathcal{C}_i$ est l'union des faces fermées partageant un sommet $p_i$. On dira qu'un chapeau $\mathcal{C}$ est \textit{convexe} (resp. \textit{concave}) si la somme des angles adjacents à $p_i$ est inférieure (resp. supérieure) à $2\pi$. On construit un balayage $\beta :[0,1]\times S^1\longrightarrow P$ en intersectant $P$ par une famille de plans parallèles $\Delta_t$, continue en $t\in [0,1]$, telle que $\Delta_0$ n'est parallèle à aucune face de $P$. On arrange l'indiciation des $p_i$ pour avoir : $$\beta(0,.) \text{ le lacet constant en } p_0$$ $$\beta(1,.) \text{ le lacet constant en } p_n$$ $\forall t\in]0,1[,\beta(t,.)$ est un polygone de longueur $l_t$ tracé sur $P$, parcouru à vitesse constante $c_t=l_t/2\pi$. \\
+
+
+\textbf{Racourcissement par disques...}\\
+On définit ici un protocole de flot par disques, c'est-à-dire un raccourcissement itératif des fibres de $\beta$ en les $\mathcal{C}_i$. En l'occurrence, on pourra parler de \textit{redressement} des fibres, amenées localement en des portions de quasi-géodésiques. On s'inspire ici des travaux de Hass et Scott [HS]. Les brèches ouvertes par le flot, notamment autour des sommets et des becs, devront être recousues avec de nouvelles fibres, plus petites que la plus longue fibre du balayage initial. En cela, le redressement des fibres dans un chapeau se heurte à trois difficultés :
+\begin{itemize}
+\item{Les chapeaux ne sont pas convexes en général, bien qu'ils soient étoilés relativement au sommet.}
+\item{Il n'y a pas toujours unicité du plus court chemin entre deux points au bord d'un chapeau.}
+\item{Traverser un chapeau en passant par le sommet n'est jamais minimisant.\\}
+\end{itemize}
+Soit $0\leq i \leq n$. On traite le premier cas où aucune fibre $\beta(t,.)$ n'est incluse dans $\mathcal{C}_i$. On appelle momentanément \textit{fibre de} $\mathcal{C}_i$ toute adhérence non vide, pour $t\in[0,1]$, d'une composante connexe de : $$\overset{\circ}{\mathcal{C}}_{ij}\cap Im(\beta(t,.))$$
+On fait passer un test à l'une des fibres passant par $p_i$ (il peut y en avoir un bouquet). On note $\gamma_p$ cette fibre et $A,B$ ses points d'entrée et de sortie de $\mathcal{C}_i$. La ligne brisée $Ap_iB$ sépare $\mathcal{C}_i$ en deux quartiers $\mathcal{C}_i^g$ et $\mathcal{C}_i^d$.
+\begin{itemize}
+\item{Si les deux angles\footnote{\textbf{Toutes les projections azimutales présentent un code couleur pour les angles :\\ $\leq \pi$ $\longrightarrow$ vert | $> \pi$ $\longrightarrow$ bleu | $=\pi$ $\longrightarrow$ violet}}formés par $Ap_iB$ sont $\leq \pi$, alors $\gamma_p$ est redressée sur  $Ap_iB$, via une homotopie décroissante pour la longueur. Dès lors et dans un même ballet d'homotopies, toutes les autres fibres de $\mathcal{C}_i$ peuvent être redressées sur un plus court chemin dans $\mathcal{C}_i$, du côté de $Ap_iB$ où elles prennent racines, à savoir $\mathcal{C}_i^g$ ou $\mathcal{C}_i^d$. Rappelons qu'aucune fibre jusqu'alors ne se coupe transversalement.}
+
+\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[scale=0.04]{etoile}  
+		\end{center}
+\end{figure}
+
+\item{Si l'angle formé par $Ap_iB$ du côté de $\mathcal{C}_i^g$ (resp. $\mathcal{C}_i^d$) est $>\pi$ (nécessairement, l'autre sera $<\pi$), on cherche une fibre $\gamma_g$ (resp. $\gamma_d)$ qui peut être redressée dans $\mathcal{C}_i^g$ (resp. $\mathcal{C}_i^d$) en passant par $p_i$, pour former un angle égal à $\pi$ : elle réalise de ce côté de $Ap_iB$ un plus court chemin. Dès lors, on redresse toutes les fibres de $\mathcal{C}_i$ de part et d'autre de $\gamma_g$ (resp. $\gamma_d)$, comme précédemment.}
+\tab
+
+\end{itemize}
+Attention, la présence d'un bec, dans ce quartier de $\mathcal{C}_i$ peut compromettre l'existence d'une telle fibre.
+\begin{definition}[Bec]
+Un bec, relativement à un chapeau $\mathcal{C}_i$, est une fibre $\beta(t,.)$ qui coupe $\partial \mathcal{C}_i$ en au moins trois temps $g_1<g_2<g_3$ tels que $\beta(t,[g_1,g_3])\subset \mathcal{C}_i$. Il est dit centré s'il enferme le sommet, excentré sinon.
+\end{definition}
+Si $\beta$ présente un bec centré d'extrémités $A'$ et $B'$ du côté de $Ap_iB$ où l'angle est plus grand que $\pi$ et s'il n'existe aucune fibre, dans la bande délimitée par $A,A',B,B'$, qui soit redressable en un plus court chemin passant par $p_i$ (comme au point 2), alors toutes les fibres à l'intérieur du bec seront redressées au-delà de $p_i$ en un plus court chemin (voir figure ci-dessous). La brèche ouverte par ce redressement sera recousu avec des fibres nécessairement plus courtes que le bec.
+\begin{figure}[h]
+		\begin{center}
+			\includegraphics[scale=0.04]{etoile-5.png}
+		\end{center}
+\end{figure}
+
+
+\textbf{Tangence}\\
+Une fibre $\gamma$ d'un chapeau peut longer une portion de son bord. Si $\gamma$ poursuit sa route à l'intérieur du chapeau, elle devrait éventuellement être redressée à partir de son premier point d'entrée dans le chapeau, de sorte qu'une brèche s'ouvrirait entre $\gamma$ et ses fibres voisines, celles en particulier qui s'accrochent au voisinage du point où $\gamma$ quitte la frontière du chapeau. La difficulté vient du fait que tous les points de la frontière du chapeau ne sont pas alors des points d'entrée ou de sortie de fibres. On propose de remplacer -- à travers une homotopie -- le paramètre de cette fibre par un intervalle fermé de taille epsilon, mis en bijection homéomorphe avec la portion du bord qui est longée. De sorte que chaque copie de $\gamma$ sera considérée comme entrant dans le chapeau au point du bord qui correspond à son paramètre. 
+
+\begin{figure}[h]
+		\begin{center}
+			\includegraphics[scale=0.04]{tangence3.png}
+		\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+%Bien que les $\mathcal{D}_{ij}$ ne soient pas convexes en général, on a unicité de la ligne brisée la plus courte joignant deux points de son bord. Étant donnée une fibre $\beta(t_k,.)$ du balayage, on traite indépendamment les composantes connexes de $\mathcal{D}_{ij}\cap Im(\beta(t_k,.))$. Si les extrémités d'une telle composante, sur la frontière de $\mathcal{D}_{ij}$, sont distinctes : on la fait glisser (homotopie monotone pour la longueur) vers un plus court chemin dans $\mathcal{D}_{ij}$, quitte à venir s'appuyer contre la frontière. On décrit globalement l'ensemble de ces chirurgies via une application : 
+
+%$$\begin{matrix}
+%h:&[0,1]&\times&[0,1]&\times& S^1&\longrightarrow &P\\
+%&s&&t&&u&\longmapsto&\beta^s(t,u)\\
+%\end{matrix}$$
+
+%{\setlength{\parindent}{0pt}Où $\beta^0=\beta$, $\beta^1=\beta'$ et à $t=t_k$ fixé, $h$ est l'homotopie entre $\beta(t_k,.)$ et $\beta'(t_k,.)$, la fibre redressée. 
+
+
+%\begin{figure}[h]
+%		\begin{center}
+%			\includegraphics[scale=0.36]{rectification-faces}
+%		\end{center}
+%		\caption{Rectification sur les paires}
+%\end{figure}
+%En appliquant ce redressement minimisant à toutes les fibres de $\beta$ passant par $\mathcal{D}_{ij}$, on s'expose à l'ouverture de brèches dans le balayage, dès lors qu'une composante connexe $\beta(t,.)_k$ rencontre la frontière de $\mathcal{D}_{ij}$ en d'autres points que ses extrémités, isolés ou non.  C'est pourquoi l'application $h$ n'est pas une homotopie entre $\beta$ et $\beta'$ ($\beta'$ n'est pas un balayage continu). Ces brèches peuvent être comblées en incorporant à chaque balayage $\beta^s=h(s,.,.)$, et de manière continue en $s\in[0,1]$, les fibres correspondant aux temps précédant $s$, de sorte qu'au temps $s=1$, on obtienne un balayage $\beta'$, homotope à $\beta$.
+
+
+\end{document}
