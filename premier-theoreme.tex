@@ -62,7 +62,7 @@ Une quasi-géodésique sur un polyèdre $P$ quelconque est un chemin continu $\gamm
 \end{itemize}
 \end{definition}
 
-\textbf{Notation} : Étant donné un polyèdre $P$, on notera $p_1,\dots,p_n$ ses $n$ sommets et $a_1,\dots,a_m$ ses $m$ arêtes, avec une notation alternative pour les arêtes reliant $p_i$ et $p_j$, à savoir $a_{ij}$. On appelle \textit{chapeau} de sommet $p_i$, noté $\mathcal{C}_i$, la réunion des faces de $P$ attachées en $p_i$.
+\textbf{Notation} : Étant donné un polyèdre $P$, on notera $p_1,\dots,p_n$ ses $n$ sommets et $a_1,\dots,a_m$ ses $m$ arêtes, avec une notation alternative pour les arêtes reliant $p_i$ et $p_j$, à savoir $a_{ij}$. On appelle \textit{chapeau} de sommet $p_i$, noté $\mathcal{C}_i$, la réunion des triangles $p_ip_lp_k$, où $p_l$ et $p_k$ sont voisins de $p_i$ et appartiennent à une même face de $P$.
 
 \begin{theorem}[Théorème 1]
 Soit $P$ un polyèdre quelconque. Il existe une quasi-géodésique simple et fermée $\gamma : S^1\longrightarrow \partial P$ dont la longueur n'excède pas $M=\sum_i L(a_i)$.
@@ -70,12 +70,54 @@ Soit $P$ un polyèdre quelconque. Il existe une quasi-géodésique simple et fermée
 On peut demander en outre, quitte à faire glisser parallèlement $\gamma$ le long des arêtes qu'elle traverse, que $0$ soit envoyé sur un sommet $p_{\star}$.
 \end{theorem}
 \begin{proof}
-Nous savons depuis [ref] que les 2-sphères sont décortiquables (shellable). En particulier, étant donné un polyèdre $P$, il existe un ordre sur l'ensemble de ses faces $\{F_1,\dots,F_p\}$ tel que : $$\forall i=1\dots p, \bigcup_{k=1}^{k=i}F_k\simeq D^2 \text{ et }\bigcup_{k=1}^{k=p}F_k\simeq S^2$$
-On considère un balayage $\mathcal{B}:S^2\longrightarrow P$ de degré 1 -- où $S^2$ est vue comme le quotient du cylindre $[0,1]\times S^1$ par la relation qui identifie les cercles $(0, S^1)$ et $(1,S^1)$ à deux points -- qui satisfait :
+Nous savons depuis [ref] que les 2-sphères sont épluchables (shellable). En particulier, il existe une triangulation $\{T_1,\dots,T_l\}$ de $P$ qui s'appuie sur les sommets $p_i$ et telle que : $$\forall i=1\dots l, \bigcup_{k=1}^{k=i}T_k\simeq D^2 \text{ et }\bigcup_{k=1}^{k=l}T_k\simeq S^2$$
+On précise que $T_i$ et $T_{i+1}$ ne sont pas nécessairement adjacents. On renomme éventuellement les sommets de $P$ pour avoir $p_0\in T_1$ et $p_n\in T_l$. On balaye $T_1$ (resp. $T_l$) par des segments $\sigma_s^1$ (resp. $\sigma_s^l$), parallèles au côté opposé à $p_0$ (resp. $p_n$). Puis, pour $i$ allant de $2$ à $l-1$ :
 \begin{itemize}
-\item{Chaque fibre $\mathcal{B}(s,.):S^1\longrightarrow P$ est une ligne brisée simple à la surface de $P$.}
-\item{Il existe une suite de valeurs : $0<s_1<\dots<s_{p-1}<1$ telle que $\mathcal{B}([0,s_i]\times S^1)=\bigcup_{k=1}^{k=i}F_k$.}
+
+\item{Si $T_i$ partage un unique côté avec $\bigcup_{k=1}^{k=i-1}T_k$, on balaye $T_i$ par des segments $\sigma_s^i$ parallèles à ce côté.}
+\item{Si $T_i$ partage deux côtés avec $\bigcup_{k=1}^{k=i-1}T_k$, on balaye $T_i$ par des segments $\sigma_s^i$ parallèles au troisième côté.}
+
 \end{itemize}
+À chaque segment $\sigma_s^i$ ainsi tiré à travers un certain $T_i$, on associe continûment (en $s$ puis en $i$) le paramétrage d'un lacet formé par le bord du disque $\bigcup_{k=1}^{k=i-1}T_k$, privé de son intersection avec $T_i$ et relié à $\sigma_s^i$ par deux portions du bord de $T_i$ (voir figure ci-dessous). Pour $i=1$ (resp. $i=l$), on relie plutôt $\sigma_s^i$ à $p_0$ (resp. $p_n$) par deux portions du bord de $T_i$. On a ainsi construit un balayage de $P$ par des cercles $\beta:S^2\longrightarrow P$ -- où $S^2$ est vue comme le quotient du cylindre $[0,1]\times S^1$ par la relation qui identifie les cercles $(0, S^1)$ et $(1,S^1)$ à deux points -- qui est de degré 1 et qui satisfait :
+\begin{itemize}
+\item{Chaque fibre $\beta(s,.):S^1\longrightarrow P$ est une ligne brisée simple à la surface de $P$.}
+\item{Il existe une suite de valeurs : $0<s_1<\dots<s_{l-1}<1$ telle que $\beta([0,s_i]\times S^1)=\bigcup_{k=1}^{k=i}T_k$.}
+\item{$\beta(0,.)$ est le lacet constant en $p_0$ et $\beta(1,.)$ est le lacet constant en $p_n$.}
+\item{$\forall s\in]0,1[,\beta(s,.)$ est un polygone de longueur $l_s$ tracé sur $P$, parcouru à vitesse constante $c_s=l_t/2\pi$.}
+\end{itemize}
+\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[scale=0.8]{epluchage2}  
+		\end{center}
+\end{figure}
+Ainsi construit, $\beta$ ne présente aucune fibre $\beta(s,.)$ dont la longueur n'excède $M$.\\ \\
+On distingue à partir de maintenant les chapeaux \textit{convexes} -- pour lesquels la somme des angles adjacents à $p_i$ est inférieure à $2\pi$ -- et \textit{concaves} -- pour lesquels la somme des angles adjacents à $p_i$ est supérieure à $2\pi$.
+
+
+\textbf{Racourcissement par disques...}\\
+On définit ici un protocole de flot par disques, c'est-à-dire un raccourcissement itératif des fibres de $\beta$ en les $\mathcal{C}_i$. En l'occurrence, on pourra parler de \textit{redressement} des fibres, amenées localement en des portions de quasi-géodésiques. On s'inspire ici des travaux de Hass et Scott [HS]. Les brèches ouvertes par le flot, notamment autour des sommets et des \textit{becs} (voir ci-dessous), devront être recousues avec de nouvelles fibres, plus petites que la plus longue fibre du balayage initial.\\ \\
+Soit $0\leq i \leq n$ et $\mathcal{C}_i$ un chapeau. On appelle \textit{arc} de $\mathcal{C}_i$ une composante connexe de : $$\mathcal{C}_{ij}\cap Im(\beta(s,.))$$
+Les différents cas à traiter dépendent des trois critères suivants :
+\begin{itemize}
+\item{Présence ou non d'une fibre entièrement incluse dans $\mathcal{C}_i$.}
+\item{Présence ou non d'un \textit{bec} dans $\mathcal{C}_i$, à savoir un arc $\delta$ de $\mathcal{C}_i$ telle que $\partial \mathcal{C}_i\cap \delta$ admet plus de deux composantes connexes. Le nombre de composantes connexes au-delà de deux définit le degré du bec.}
+\item{Convexité ou concavité de $\mathcal{C}_i$.}
+\end{itemize}
+On traite le cas où aucune fibre $\beta(t,.)$ n'est incluse dans $\mathcal{C}_i$, aucun bec ne traverse $\mathcal{C}_i$, avec $\mathcal{C}_i$ convexe.
+On fait passer un test à l'une des fibres passant par $p_i$ (il peut y en avoir un bouquet). On note $\gamma_p$ cette fibre et $A,B$ ses points d'entrée et de sortie de $\mathcal{C}_i$. La ligne brisée $Ap_iB$ sépare $\mathcal{C}_i$ en deux quartiers $\mathcal{C}_i^g$ et $\mathcal{C}_i^d$.
+\begin{itemize}
+\item{Si les deux angles\footnote{\textbf{Toutes les projections azimutales présentent un code couleur pour les angles :\\ $\leq \pi$ $\longrightarrow$ vert | $> \pi$ $\longrightarrow$ bleu | $=\pi$ $\longrightarrow$ violet}} formés par $Ap_iB$ sont $\leq \pi$, alors $\gamma_p$ est redressée sur  $Ap_iB$, via une homotopie décroissante pour la longueur. Dès lors et dans un même ballet d'homotopies, toutes les autres fibres de $\mathcal{C}_i$ peuvent être redressées sur un plus court chemin dans $\mathcal{C}_i$, du côté de $Ap_iB$ où elles prennent racines, à savoir $\mathcal{C}_i^g$ ou $\mathcal{C}_i^d$. Rappelons qu'aucune fibre jusqu'alors ne se coupe transversalement.}
+
+\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[scale=0.23]{chapeau-1et2}  
+		\end{center}
+\end{figure}
+\item{Si l'angle formé par $Ap_iB$ du côté de $\mathcal{C}_i^g$ (resp. $\mathcal{C}_i^d$) est $>\pi$ (nécessairement, l'autre sera $<\pi$), on cherche une fibre $\gamma_g$ (resp. $\gamma_d)$ qui peut être redressée dans $\mathcal{C}_i^g$ (resp. $\mathcal{C}_i^d$) en passant par $p_i$, pour former un angle égal à $\pi$ : elle réalise de ce côté de $Ap_iB$ un plus court chemin. Dès lors, on redresse toutes les fibres de $\mathcal{C}_i$ de part et d'autre de $\gamma_g$ (resp. $\gamma_d)$, comme précédemment.}
+\tab
+
+\end{itemize}
+Attention, la présence d'un bec, dans ce quartier de $\mathcal{C}_i$ peut compromettre l'existence d'une telle fibre.
 \end{proof}
 
 
@@ -137,36 +179,12 @@ Dans les trois cas :
 
 \end{itemize}
 L'un au moins des mots valides doit passer le test avec succès, à commencer par $\overline{\gamma}$.\\
-Ainsi, \textbf{le test fournit la construction d'une quasi-géodésique sur $P$}.\\ \\ \\ \\ \\ \\ \\
+Ainsi, \textbf{le test fournit la construction d'une quasi-géodésique sur $P$}.\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
 \end{proof}
 
 
-Soit $P$ un polyèdre convexe de sommets $p_i$. On note $a_{ij}$ l'arête qui joint $p_i$ et $p_j$ quand elle existe. On considère un recouvrement de $P$ par ses \textit{chapeaux}. Un chapeau $\mathcal{C}_i$ est l'union des faces fermées partageant un sommet $p_i$. On dira qu'un chapeau $\mathcal{C}$ est \textit{convexe} (resp. \textit{concave}) si la somme des angles adjacents à $p_i$ est inférieure (resp. supérieure) à $2\pi$. On construit un balayage $\beta :[0,1]\times S^1\longrightarrow P$ en intersectant $P$ par une famille de plans parallèles $\Delta_t$, continue en $t\in [0,1]$, telle que $\Delta_0$ n'est parallèle à aucune face de $P$. On arrange l'indiciation des $p_i$ pour avoir : $$\beta(0,.) \text{ le lacet constant en } p_0$$ $$\beta(1,.) \text{ le lacet constant en } p_n$$ $\forall t\in]0,1[,\beta(t,.)$ est un polygone de longueur $l_t$ tracé sur $P$, parcouru à vitesse constante $c_t=l_t/2\pi$. \\
 
 
-\textbf{Racourcissement par disques...}\\
-On définit ici un protocole de flot par disques, c'est-à-dire un raccourcissement itératif des fibres de $\beta$ en les $\mathcal{C}_i$. En l'occurrence, on pourra parler de \textit{redressement} des fibres, amenées localement en des portions de quasi-géodésiques. On s'inspire ici des travaux de Hass et Scott [HS]. Les brèches ouvertes par le flot, notamment autour des sommets et des becs, devront être recousues avec de nouvelles fibres, plus petites que la plus longue fibre du balayage initial. En cela, le redressement des fibres dans un chapeau se heurte à trois difficultés :
-\begin{itemize}
-\item{Les chapeaux ne sont pas convexes en général, bien qu'ils soient étoilés relativement au sommet.}
-\item{Il n'y a pas toujours unicité du plus court chemin entre deux points au bord d'un chapeau.}
-\item{Traverser un chapeau en passant par le sommet n'est jamais minimisant.\\}
-\end{itemize}
-Soit $0\leq i \leq n$. On traite le premier cas où aucune fibre $\beta(t,.)$ n'est incluse dans $\mathcal{C}_i$. On appelle momentanément \textit{fibre de} $\mathcal{C}_i$ toute adhérence non vide, pour $t\in[0,1]$, d'une composante connexe de : $$\overset{\circ}{\mathcal{C}}_{ij}\cap Im(\beta(t,.))$$
-On fait passer un test à l'une des fibres passant par $p_i$ (il peut y en avoir un bouquet). On note $\gamma_p$ cette fibre et $A,B$ ses points d'entrée et de sortie de $\mathcal{C}_i$. La ligne brisée $Ap_iB$ sépare $\mathcal{C}_i$ en deux quartiers $\mathcal{C}_i^g$ et $\mathcal{C}_i^d$.
-\begin{itemize}
-\item{Si les deux angles\footnote{\textbf{Toutes les projections azimutales présentent un code couleur pour les angles :\\ $\leq \pi$ $\longrightarrow$ vert | $> \pi$ $\longrightarrow$ bleu | $=\pi$ $\longrightarrow$ violet}}formés par $Ap_iB$ sont $\leq \pi$, alors $\gamma_p$ est redressée sur  $Ap_iB$, via une homotopie décroissante pour la longueur. Dès lors et dans un même ballet d'homotopies, toutes les autres fibres de $\mathcal{C}_i$ peuvent être redressées sur un plus court chemin dans $\mathcal{C}_i$, du côté de $Ap_iB$ où elles prennent racines, à savoir $\mathcal{C}_i^g$ ou $\mathcal{C}_i^d$. Rappelons qu'aucune fibre jusqu'alors ne se coupe transversalement.}
-
-\begin{figure}[h!]
-		\begin{center}
-			\includegraphics[scale=0.04]{etoile}  
-		\end{center}
-\end{figure}
-
-\item{Si l'angle formé par $Ap_iB$ du côté de $\mathcal{C}_i^g$ (resp. $\mathcal{C}_i^d$) est $>\pi$ (nécessairement, l'autre sera $<\pi$), on cherche une fibre $\gamma_g$ (resp. $\gamma_d)$ qui peut être redressée dans $\mathcal{C}_i^g$ (resp. $\mathcal{C}_i^d$) en passant par $p_i$, pour former un angle égal à $\pi$ : elle réalise de ce côté de $Ap_iB$ un plus court chemin. Dès lors, on redresse toutes les fibres de $\mathcal{C}_i$ de part et d'autre de $\gamma_g$ (resp. $\gamma_d)$, comme précédemment.}
-\tab
-
-\end{itemize}
-Attention, la présence d'un bec, dans ce quartier de $\mathcal{C}_i$ peut compromettre l'existence d'une telle fibre.
 \begin{definition}[Bec]
 Un bec, relativement à un chapeau $\mathcal{C}_i$, est une fibre $\beta(t,.)$ qui coupe $\partial \mathcal{C}_i$ en au moins trois temps $g_1<g_2<g_3$ tels que $\beta(t,[g_1,g_3])\subset \mathcal{C}_i$. Il est dit centré s'il enferme le sommet, excentré sinon.
 \end{definition}
