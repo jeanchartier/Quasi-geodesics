@@ -165,8 +165,19 @@ $$\eta=\left\lceil M\;.\;\underset{a_{ij}}{max}\;k(a_{ij}) \right\rceil$$
 To $\gamma$ necessarily corresponds such a word, noted $\mathcal{E}(\gamma)$. Conversely, to a word $x=\overline{p_{\star}l_1\dots l_{\eta-1}p_{\star}}$ corresponds a simple and closed quasi-geodesic if it satisfies, from left to right, the following test :
 \begin{itemize}
 \item{First case: $\overline{p_ia_{ij}p_j}$ takes place in $x$. We save the path $[p_i,p_j]$ along $a_{ij}$.}
-\item{Second case: $\overline{p_ia_{k_1k_2}p_j}$ takes place in $x$, where $(p_i,p_{k_1},p_{k_2})$ and $(p_j,p_{k_1},p_{k_2})$ designate two adjacent triangles. We save the path $[p_i,p_j]$ through the straightening of the two triangles in question.}
-\item{Third case: two vertices $p_i$ and $p_j$ surround a sequence $\overline{a_{k_1}\dots a_{k_r}}$ in $x$. We associate with $a_{k_1}$ its two ends noted $p_{s_0},p_{s_1}$ and for $l\geq 2$, we associate with each $a_{k_l}$ the vertex $p_{s_l}$ it does not share with $a_{k_{l-1}}$. Also, we have a decreasing function $f:l\mapsto f(l)$ such that $p_{s_l}$ and $p_{s_{f(l)}}$ are the ends of $a_{k_l}$. We send the vertices $(p_i,p_{s_1},\dots , p_{k_r}p_j)$ in an oriented plane coordinate system, so that all the triangles keep their metric and their relative orientations (we assume that $0<(\overrightarrow{p_ip_{s_1}},\overrightarrow{p_ip_{s_2}})<\pi$). We endow ourselves with Boolean functions determining whether a point is located to the left (resp. the right) of an oriented line $(p_i,\overrightarrow{u})$, strictly or not: $p\mapsto (p<u)$, $p\mapsto (p\leq u)$ (resp. $p\mapsto (p>u)$, $p\mapsto (p\geq u)$). The following algorithm evaluates this syllable of $x$:\\ \\
+\item{Second case: $\overline{p_ia_{k_1k_2}p_j}$ takes place in $x$, where $(p_i,p_{k_1},p_{k_2})$ and $(p_j,p_{k_1},p_{k_2})$ designate two adjacent triangles. We save the path $[p_i,p_j]$ through the flattening of the two triangles in question, unless it is not convex, in which case the test fails.}
+\item{Third case: two vertices $p_i$ and $p_j$ surround a sequence $\overline{a_{k_1}\dots a_{k_r}}$ in $x$. We associate with $a_{k_1}$ its two ends noted $p_{s_0},p_{s_1}$ and for $l\geq 2$, we associate with each $a_{k_l}$ the vertex $p_{s_l}$ it does not share with $a_{k_{l-1}}$. Also, we have a decreasing function $f:l\mapsto f(l)$ such that $p_{s_l}$ and $p_{s_{f(l)}}$ are the ends of $a_{k_l}$. We send the vertices $(p_i,p_{s_1},\dots , p_{k_r}p_j)$ in an oriented plane coordinate system, so that all the triangles keep their metric and their relative orientations (we assume that $0<(\overrightarrow{p_ip_{s_0}},\overrightarrow{p_ip_{s_1}})<\pi$).
+
+
+
+\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[scale=1.1]{cas-test.png}  
+		\end{center}
+\end{figure}
+
+
+We endow ourselves with Boolean functions determining whether a point is located to the left (resp. the right) of an oriented line $(p_i,\overrightarrow{u})$, strictly or not: $p\mapsto (p<u)$, $p\mapsto (p\leq u)$ (resp. $p\mapsto (p>u)$, $p\mapsto (p\geq u)$). The following algorithm evaluates this syllable of $x$:\\ \\
 $u=\overrightarrow{p_ip_{k_1}}$\\
 $v=\overrightarrow{p_ip_{k_2}}$\\
 $\tau=1$\\
