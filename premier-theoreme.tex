@@ -33,17 +33,17 @@
   {\newline}% space after theorem head; " " = normal interword space
   {}
 \theoremstyle{break}
-\newtheorem{lemma}{Lemme}[section]
-\newtheorem{corollaire}{Corollaire}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollaire}{Corollary}[section]
 \newtheorem{proposition}{Proposition}[section]
-\newtheorem{theorem}{Theorème}[section]
-\newtheorem{definition}{Définition}[section]
-\newtheorem{example}{Exemple}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
 \newtheorem{exo}{Exercice}[section]
 \theoremstyle{plain}
-\newtheorem{remark}{Remarque}[section]
+\newtheorem{remark}{Remark}[section]
 
-\title{Construction d'une quasi-géodésique sur un polyèdre convexe}
+\title{Construction of a quasi-geodesic on a linear sphere by piece}
 \author{Jean Chartier}
 %\date{}
 \begin{document}
@@ -51,92 +51,104 @@
 
 
 
-En 1949, Alexandre Pogorelov démontre l'existence d'une quasi-géodésique simple et fermée sur tout polyèdre convexe\footnote{Nous donnons en annexe la preuve qu'il n'existe pas toujours de quasi-géodésique déterministe sur un polyèdre convexe, c'est-à-dire le cas échéant, qui traverse les sommets en formant deux angles égaux.}. Nous nous proposons de décrire un algorithme permettant de construire à la surface (homéomorphe à la sphère) de tout polyèdre (convexe ou non), une telle quasi-géodésique. Nous démontrons d'abord l'existence d'une quasi-géodésique de longueur inférieure à une borne dépendant du polyèdre. Cela nous donne une borne supérieure sur la combinatoire de la quasi-géodésique (ordre de rencontre des sommets et arêtes) et nous permet de dresser une liste des chemins à tester. 
-\begin{definition}[Quasi-géodésique]
-Une quasi-géodésique sur un polyèdre $P$ quelconque est un chemin continu $\gamma : I\longrightarrow \partial P$, où $I$ est un intervalle de $\mathbb{R}$, satisfaisant quatre conditions :
+In 1949, Alexandre Pogorelov proves the existence of a simple and closed quasi-geodesic on any convex polyhedron\footnote{We give in the appendix the proof that there does not always exist a straight quasi-geodesic on a convex polyhedron, that is to say if necessary, which crosses the vertices forming two equal angles.}. We propose to describe an algorithm allowing to build such a quasi-geodesic on any linear sphere by pieces, not necessarily convex. We first prove the existence of a quasi-geodesic of length less than a bound depending on a triangulation of the faces. This gives us an upper bound on the combinatorics of the quasi-geodesic (order of meeting of the vertices and edges) and allows us to draw up a list of the paths to be tested. 
+\begin{definition}[Quasi-geodesic]
+A quasi-geodesic on a piecewise linear surface $S$ is a continuous path $\gamma : I\longrightarrow \partial S$, where $I$ is an interval of $\mathbb{R}$, satisfying four conditions :
 \begin{itemize}
-\item{Il est rectiligne uniforme sur les faces de $P$ qu'il traverse.}
-\item{Il forme au passage d'une arête deux angles égaux à $\pi$.}
-\item{Il forme au passage d'un sommet de courbure positive deux angles inférieurs ou égaux à $\pi$.}
-\item{Il forme au passage d'un sommet de courbure négative deux angles supérieurs ou égaux à $\pi$.}
+\item{It is uniform rectilinear on the faces of $ S $ that it crosses.}
+\item{It forms on the passage of an edge two angles equal to $\pi$.}
+\item{It forms on the passage of a vertex of positive curvature two angles less than or equal to $\pi$.}
+\item{IIt forms on the passage of a vertex of negative curvature two angles greater than or equal to $\pi$.}
 \end{itemize}
 \end{definition}
 
-\textbf{Notation} : Étant donné un polyèdre $P$, on notera $p_1,\dots,p_n$ ses $n$ sommets et $a_1,\dots,a_m$ ses $m$ arêtes, avec une notation alternative pour les arêtes reliant $p_i$ et $p_j$, à savoir $a_{ij}$. On appelle \textit{chapeau} de sommet $p_i$, noté $\mathcal{C}_i$, la réunion des triangles $p_ip_lp_k$, où $p_l$ et $p_k$ sont voisins de $p_i$ et appartiennent à une même face de $P$.
+\textbf{Notation} : Given a linear sphere by piece $S$ of vertices $p_1,\dots,p_n$, we consider a triangulation $\{T_1,\dots,T_l\}$ which is based on the vertices and which be shellable\footnote{ref}, that is to say : $$\forall i=1\dots l, \bigcup_{k=1}^{k=i}T_k\simeq D^2 \text{ et }\bigcup_{k=1}^{k=l}T_k\simeq S^2$$
+From now on, we can work from the metric of $T_k$ and their combinatorics within $S$. We denote by $a_1, \dots, a_m$ the edges of this triangulation (old and new edges combined), or else if necessary, $a_{ij}$ the edge which connects the vertices $p_i$ and $p_j$. We call \textit{hat} of vertex $p_i$, denoted by $\mathcal {C}_i$, the union of the triangles $T_k$ having $p_i$ for common vertex. We specify that $T_i$ and $T_{i+1}$ are not necessarily adjacent. We optionally rename the vertices of $P$ to have $p_0\in T_1$ et $p_n\in T_l$.
 
-\begin{theorem}[Théorème 1]
-Soit $P$ un polyèdre quelconque. Il existe une quasi-géodésique simple et fermée $\gamma : S^1\longrightarrow \partial P$ dont la longueur n'excède pas $M=\sum_i L(a_i)$.
+\begin{theorem}[Existence]
+Let $S$ be a linear sphere by piece as above. There is a simple and closed quasi-geodesic $\gamma : S^1\longrightarrow \partial P$ whose length does not exceed $M=\sum_i L(a_i)$.
 %$M=\epsilon + \underset {(a,b,c)\pm P}{min}\; \underset{t\in \mathbb{R}}{max}\; L\left( \partial P\cap \{(x,y,z)\in \mathbb{R}^3 | ax+by+cz=t\}\right)$.\\
-On peut demander en outre, quitte à faire glisser parallèlement $\gamma$ le long des arêtes qu'elle traverse, que $0$ soit envoyé sur un sommet $p_{\star}$.
+We can also ask, even if it means dragging $\gamma$ in parallel along the edges it crosses, that a point of $S^1$ be sent to a vertex $p_{\star}$.
 \end{theorem}
 \begin{proof}
-Nous savons depuis [ref] que les 2-sphères sont épluchables (shellable). En particulier, il existe une triangulation $\{T_1,\dots,T_l\}$ de $P$ qui s'appuie sur les sommets $p_i$ et telle que : $$\forall i=1\dots l, \bigcup_{k=1}^{k=i}T_k\simeq D^2 \text{ et }\bigcup_{k=1}^{k=l}T_k\simeq S^2$$
-On précise que $T_i$ et $T_{i+1}$ ne sont pas nécessairement adjacents. On renomme éventuellement les sommets de $P$ pour avoir $p_0\in T_1$ et $p_n\in T_l$. On balaye $T_1$ (resp. $T_l$) par des segments $\sigma_s^1$ (resp. $\sigma_s^l$), parallèles au côté opposé à $p_0$ (resp. $p_n$). Puis, pour $i$ allant de $2$ à $l-1$ :
+We start by describing a sweep of $ S $ by simple loops, bounded in length. We sweep $T_1$ (resp. $T_l$) by segments $\sigma_s^1$ (resp. $\sigma_s^l$), parallel to the side opposite to $p_0$ (resp. $p_n$). Then, for $i$ from $2$ to $l-1$ :
 \begin{itemize}
 
-\item{Si $T_i$ partage un unique côté avec $\bigcup_{k=1}^{k=i-1}T_k$, on balaye $T_i$ par des segments $\sigma_s^i$ parallèles à ce côté.}
-\item{Si $T_i$ partage deux côtés avec $\bigcup_{k=1}^{k=i-1}T_k$, on balaye $T_i$ par des segments $\sigma_s^i$ parallèles au troisième côté.}
+\item{If $T_i$ shares a single side with $\bigcup_{k=1}^{k=i-1}T_k$, we sweep $T_i$ by segments $\sigma_s^i$ parallel to this side.}
+\item{If $T_i$ shares two sides with $\bigcup_{k=1}^{k=i-1}T_k$, we sweep $T_i$ by segments $\sigma_s^i$ parallel to the third side.}
 
 \end{itemize}
-À chaque segment $\sigma_s^i$ ainsi tiré à travers un certain $T_i$, on associe continûment (en $s$ puis en $i$) le paramétrage d'un lacet formé par le bord du disque $\bigcup_{k=1}^{k=i-1}T_k$, privé de son intersection avec $T_i$ et relié à $\sigma_s^i$ par deux portions du bord de $T_i$ (voir figure ci-dessous). Pour $i=1$ (resp. $i=l$), on relie plutôt $\sigma_s^i$ à $p_0$ (resp. $p_n$) par deux portions du bord de $T_i$. On a ainsi construit un balayage de $P$ par des cercles $\beta:S^2\longrightarrow P$ -- où $S^2$ est vue comme le quotient du cylindre $[0,1]\times S^1$ par la relation qui identifie les cercles $(0, S^1)$ et $(1,S^1)$ à deux points -- qui est de degré 1 et qui satisfait :
+At each segment $\sigma_s^i$ so pulled through a certain $T_i$, we continuously associate (in $s$ then in $i$) the parameterization of a loop formed by the edge of the disc $\bigcup_{k=1}^{k=i-1}T_k$, deprived of its intersection with $T_i$ and linked to $\sigma_s^i$ by two portions of the edge of $T_i$ (see figure below). For $i=1$ (resp. $i=l$), rather we connect $\sigma_s^i$ to $p_0$ (resp. $p_n$) by two portions of the $T_i$'s boundary. We have thus constructed a sweep of $S$ by circles $\beta:S^2\longrightarrow P$ -- where $S^2$ is seen as the quotient of the cylinder $[0,1]\times S^1$ by the relation which identifies the circles $(0, S^1)$ and $(1,S^1)$ to two points -- which is of degree 1 and which satisfies:
 \begin{itemize}
-\item{Chaque fibre $\beta(s,.):S^1\longrightarrow P$ est une ligne brisée simple à la surface de $P$.}
-\item{Il existe une suite de valeurs : $0<s_1<\dots<s_{l-1}<1$ telle que $\beta([0,s_i]\times S^1)=\bigcup_{k=1}^{k=i}T_k$.}
-\item{$\beta(0,.)$ est le lacet constant en $p_0$ et $\beta(1,.)$ est le lacet constant en $p_n$.}
-\item{$\forall s\in]0,1[,\beta(s,.)$ est un polygone de longueur $l_s$ tracé sur $P$, parcouru à vitesse constante $c_s=l_t/2\pi$.}
+\item{Each fiber $\beta(s,.):S^1\longrightarrow P$ is a single broken line on the surface of $S$.}
+\item{There is a sequence of values : $0<s_1<\dots<s_{l-1}<1$ such that $\beta([0,s_i]\times S^1)=\bigcup_{k=1}^{k=i}T_k$.}
+\item{$\beta(0,.)$ is the constant loop in $p_0$ and $\beta(1,.)$ is the constant loop in $p_n$.}
+\item{$\forall s\in]0,1[,\beta(s,.)$ is a polygon of length $l_s$ drawed on $S$, traveled at constant speed $c_s=l_t/2\pi$.}
 \end{itemize}
 \begin{figure}[h!]
 		\begin{center}
 			\includegraphics[scale=0.8]{epluchage2}  
 		\end{center}
 \end{figure}
-Ainsi construit, $\beta$ ne présente aucune fibre $\beta(s,.)$ dont la longueur n'excède $M$.\\ \\
-On distingue à partir de maintenant les chapeaux \textit{convexes} -- pour lesquels la somme des angles adjacents à $p_i$ est inférieure à $2\pi$ -- et \textit{concaves} -- pour lesquels la somme des angles adjacents à $p_i$ est supérieure à $2\pi$.
+Thus constructed, $\beta$ has no fiber $\beta(s,.)$ Whose length does not exceed $M$.\\ \\
+From now on, we can distinguish between the hats \textit{convex} - for which the sum of the angles adjacent to $p_i$ is less than $2\pi$ - and \textit{concave} - for which the sum of the adjacent angles to $p_i$ is greater than $2\pi $.\\
 
 
-\textbf{Racourcissement par disques...}\\
-On définit ici un protocole de flot par disques, c'est-à-dire un raccourcissement itératif des fibres de $\beta$ en les $\mathcal{C}_i$. En l'occurrence, on pourra parler de \textit{redressement} des fibres, amenées localement en des portions de quasi-géodésiques. On s'inspire ici des travaux de Hass et Scott [HS]. Les brèches ouvertes par le flot, notamment autour des sommets et des \textit{becs} (voir ci-dessous), devront être recousues avec de nouvelles fibres, plus petites que la plus longue fibre du balayage initial.\\ \\
-Soit $0\leq i \leq n$ et $\mathcal{C}_i$ un chapeau. On appelle \textit{arc} de $\mathcal{C}_i$ une composante connexe de : $$\mathcal{C}_{ij}\cap Im(\beta(s,.))$$
-Les différents cas à traiter dépendent des trois critères suivants :
+\textbf{Shortening by discs.}\\
+We define here a disk flow protocol, that is to say an iterative shortening of the $\beta$'s fibers located in $\mathcal{C}_i$. In this case, we can speak of \textit{straightening} of the fibers, brought locally into portions of quasi-geodesics. We are inspired here by the work of Hass and Scott [HS]. Gaps opened by the flow, especially around vertices and \textit{beaks} (see below), will need to be stitched up with new fibers, smaller than the longest fiber of the initial sweep. \\ \\
+Let $0\leq i \leq n$ and $\mathcal{C}_i$ be a hat. We call \textit{arc} of $\mathcal{C}_i$ a connected component of : $$\mathcal{C}_{ij}\cap Im(\beta(s,.))$$
+The different cases to be treated depend on the following three criteria:
 \begin{itemize}
-\item{Présence ou non d'une fibre entièrement incluse dans $\mathcal{C}_i$.}
-\item{Présence ou non d'un \textit{bec} dans $\mathcal{C}_i$, à savoir un arc $\delta$ de $\mathcal{C}_i$ telle que $\partial \mathcal{C}_i\cap \delta$ admet plus de deux composantes connexes. Le nombre de composantes connexes au-delà de deux définit le degré du bec.}
-\item{Convexité ou concavité de $\mathcal{C}_i$.}
+\item{Presence or not of a fiber entirely included in $\mathcal{C}_i$.}
+\item{Presence or not of a \textit{beac} in $\mathcal{C}_i$, namely an arc $\delta$ in $\mathcal{C}_i$ such that $\partial \mathcal{C}_i\cap \delta$ admits more than two connected components. The number of connected components beyond two defines the degree of the beak.}
+\item{Convexity or concavity of $\mathcal{C}_i$.}
 \end{itemize}
-On traite le cas où aucune fibre $\beta(t,.)$ n'est incluse dans $\mathcal{C}_i$, aucun bec ne traverse $\mathcal{C}_i$, avec $\mathcal{C}_i$ convexe.
-On fait passer un test à l'une des fibres passant par $p_i$ (il peut y en avoir un bouquet). On note $\gamma_p$ cette fibre et $A,B$ ses points d'entrée et de sortie de $\mathcal{C}_i$. La ligne brisée $Ap_iB$ sépare $\mathcal{C}_i$ en deux quartiers $\mathcal{C}_i^g$ et $\mathcal{C}_i^d$.
+\textbf{Case 1 -} We treat the case where no fiber $\beta(t,.)$ is included in $\mathcal{C}_i$, no beak crosses $\mathcal{C}_i$, with $\mathcal{C}_i$ convex.
+We test one of the fibers passing through $p_i$ (there may be a bunch). We denote by $\gamma_p$ this fiber and $A,B$ its entry and exit points of $\mathcal{C}_i$. The broken line$Ap_iB$ split $\mathcal{C}_i$ in two quarters $\mathcal{C}_i^l$ and $\mathcal{C}_i^r$.
 \begin{itemize}
-\item{Si les deux angles\footnote{\textbf{Toutes les projections azimutales présentent un code couleur pour les angles :\\ $\leq \pi$ $\longrightarrow$ vert | $> \pi$ $\longrightarrow$ bleu | $=\pi$ $\longrightarrow$ violet}} formés par $Ap_iB$ sont $\leq \pi$, alors $\gamma_p$ est redressée sur  $Ap_iB$, via une homotopie décroissante pour la longueur. Dès lors et dans un même ballet d'homotopies, toutes les autres fibres de $\mathcal{C}_i$ peuvent être redressées sur un plus court chemin dans $\mathcal{C}_i$, du côté de $Ap_iB$ où elles prennent racines, à savoir $\mathcal{C}_i^g$ ou $\mathcal{C}_i^d$. Rappelons qu'aucune fibre jusqu'alors ne se coupe transversalement.}
+\item{If the two angles\footnote{\textbf{All zenith projections are color coded for the angles :\\ $\leq \pi$ $\longrightarrow$ green | $> \pi$ $\longrightarrow$ blue | $=\pi$ $\longrightarrow$ purple}} formed by $Ap_iB$ are $\leq \pi$, then $\gamma_p$ is straightened out $Ap_iB$, via a decreasing homotopy for the length. Therefore and in the same homotopy ballet, all the other fibers of $\mathcal{C}_i$ can be straightened on a shorter path in $\mathcal{C}_i$, on the side of $Ap_iB$ where they take roots, namely $\mathcal{C}_i^l$ or $\mathcal{C}_i^r$. Remember that no fiber up to now has been cut transversely. Note: a hat is not necessarily convex -- it is at least starred --, then the shortest path between two point of its boundary can come to rest against it.}
 
 \begin{figure}[h!]
 		\begin{center}
 			\includegraphics[scale=0.23]{chapeau-1et2}  
 		\end{center}
 \end{figure}
-\item{Si l'angle formé par $Ap_iB$ du côté de $\mathcal{C}_i^g$ (resp. $\mathcal{C}_i^d$) est $>\pi$ (nécessairement, l'autre sera $<\pi$), on cherche une fibre $\gamma_g$ (resp. $\gamma_d)$ qui peut être redressée dans $\mathcal{C}_i^g$ (resp. $\mathcal{C}_i^d$) en passant par $p_i$, pour former un angle égal à $\pi$ : elle réalise de ce côté de $Ap_iB$ un plus court chemin. Dès lors, on redresse toutes les fibres de $\mathcal{C}_i$ de part et d'autre de $\gamma_g$ (resp. $\gamma_d)$, comme précédemment.}
+\item{If the angle formed by $Ap_iB$ on the side of $\mathcal{C}_i^l$ (resp. $\mathcal{C}_i^r$) is $>\pi$ (necessarily, the other will be $<\pi$), we are looking for a fiber $\gamma_l$ (resp. $\gamma_r)$ which can be straightened in $\mathcal{C}_i^l$ (resp. $\mathcal{C}_i^r$) passing through $p_i$, to form an angle equal to $\pi$: it realizes on this side of $Ap_iB$ a shorter path. Therefore, we straighten all the fibers of $\mathcal{C}_i$ on either side of $\gamma_l$ (resp. $\gamma_r)$, as before.}
 \tab
 
+\textbf{Case 2 -} We treat the case where no fiber $\beta(t,.)$ is included in $\mathcal{C}_i$, no beak crosses $\mathcal{C}_i$, with $\mathcal{C}_i$ concave.
+We test one of the fibers passing through $p_i$, by taking the previous notations.
+%\begin{itemize}
+%\item{If the two angles formed by $Ap_iB$ are $\geq \pi$, then $\gamma_p$ is straightened out $Ap_iB$, via a decreasing homotopy for the length. Therefore and in the same homotopy ballet, all the other fibers of $\mathcal{C}_i$ can be straightened on a shorter path in $\mathcal{C}_i$, on the side of $Ap_iB$ where they take roots, namely $\mathcal{C}_i^l$ or $\mathcal{C}_i^r$. Remember that no fiber up to now has been cut transversely. Note: a hat is not necessarily convex -- it is at least starred --, then the shortest path between two point of its boundary can come to rest against it.}
+
+%\begin{figure}[h!]
+%		\begin{center}
+%			\includegraphics[scale=0.23]{chapeau-1et2}  
+%		\end{center}
+%\end{figure}
+%\item{If the angle formed by $Ap_iB$ on the side of $\mathcal{C}_i^l$ (resp. $\mathcal{C}_i^r$) is $>\pi$ (necessarily, the other will be $<\pi$), we are looking for a fiber $\gamma_l$ (resp. $\gamma_r)$ which can be straightened in $\mathcal{C}_i^l$ (resp. $\mathcal{C}_i^r$) passing through $p_i$, to form an angle equal to $\pi$: it realizes on this side of $Ap_iB$ a shorter path. Therefore, we straighten all the fibers of $\mathcal{C}_i$ on either side of $\gamma_l$ (resp. $\gamma_r)$, as before.}
+
 \end{itemize}
-Attention, la présence d'un bec, dans ce quartier de $\mathcal{C}_i$ peut compromettre l'existence d'une telle fibre.
+Attention, the presence of a beak, in this district of $\mathcal{C}_i$ can compromise the existence of such a fiber.
 \end{proof}
 
 
-\begin{theorem}[Théorème 2]
-Il existe un algorithme permettant de construire une telle quasi-géodésique.
+\begin{theorem}[Theorem 2]
+There is an algorithm making it possible to construct such a quasi-geodesic.
 \end{theorem}
-\begin{proof}[Preuve du Théorème 2]
-Soit $\mathcal{E}=\{p_1,\dots,p_n,a_1,\dots,a_m\}$ l'ensemble des sommets et arêtes ouvertes de $P$. À une courbe simple $c:I\longrightarrow P$, on associe le mot $\mathcal{E}(c)$ composé des éléments ordonnés de $\mathcal{E}$ rencontrés par $c(t)$ quand $t$ parcourt $I$. On veut donner une borne $\eta$ sur la combinatoire de $\gamma$, c'est-à-dire une borne sur la longueur de $\mathcal{E}(\gamma)$. À chaque arête $a_{ij}$, on associe un coefficient de rencontre $k(a_{ij})$ mesuré comme suit :
+\begin{proof}[Proof of Theorem 2]
+Let $\mathcal{E}=\{p_1,\dots,p_n,a_1,\dots,a_m\}$ be the set of vertices and open edges of $S$. To a closed curve $c:I\longrightarrow P$, we associate the word $\mathcal{E}(c)$ whose successive letters (grouped under a bar) are those which designate the elements of $\mathcal{E}$ met by $c(t)$ when $t$ travels $S^1$. We want to give a bound $\eta$ on the combinatorial of $\gamma$, that is to say a bound on the length of $\mathcal{E}(\gamma)$. To each edge $a_{ij}$, we associate a meeting coefficient $k(a_{ij})$ measured as follows:
 
 $$k(a_{ij})=\underset {\begin{matrix}A\in a_{ij}\\B\in \partial(\mathcal{C}_i\cup\mathcal{C}_j)\end{matrix}}{max}\frac{\#([AB], \mathcal{E})-1}{L(AB)}$$
-Où $[AB]$ est le plus court chemin sur $P$ entre $A$ et $B$ et où $\#([AB], \mathcal{E})$ désigne le nombre d'éléments de $\mathcal{E}$ rencontrés par $[AB]$, transversalement ou longitudinalement s'il s'agit d'une arête. %Notons que $[AB]$ est une quasi-géodésique qui ne passe par aucun sommet, si ce n'est éventuellement en $A$ ou $B$. En effet, le plus court chemin entre deux points qui ne sont pas des sommets évite toujours ces derniers. Ainsi, il existe un patron local de $P$ sur lequel $[AB]$ est développé en segment.  \\
+Where $[AB]$ is the shortest way on $S$ beetwen $A$ and $B$ and $\#([AB], \mathcal{E})$ denotes the number of elements of $\mathcal{E}$ met by $[AB]$, transversely or longitudinally if it is an edge.%Notons que $[AB]$ est une quasi-géodésique qui ne passe par aucun sommet, si ce n'est éventuellement en $A$ ou $B$. En effet, le plus court chemin entre deux points qui ne sont pas des sommets évite toujours ces derniers. Ainsi, il existe un patron local de $P$ sur lequel $[AB]$ est développé en segment.  \\
 
 \begin{figure}[h!]
 		\begin{center}
-			\includegraphics[scale=0.29]{coeff-de-rencontre}  
+			\includegraphics[scale=0.9]{double-chapeau}  
 		\end{center}
 \end{figure}
 
-{\setlength{\parindent}{0pt}On a alors une expression de $\eta$ :}
+{\setlength{\parindent}{0pt}We then have an expression of $\eta$ :}
 
 $$\eta=\left\lceil M\;.\;\underset{a_{ij}}{max}\;k(a_{ij}) \right\rceil$$
 
@@ -144,32 +156,54 @@ $$\eta=\left\lceil M\;.\;\underset{a_{ij}}{max}\;k(a_{ij}) \right\rceil$$
 \tab
 
 
-{\setlength{\parindent}{0pt}On considère l'ensemble\footnote{De cardinal $n(n+m)^{\eta-1}$} des mots de $\eta+1$ lettres prises dans $\mathcal{E}$, commençants et terminants par un même nom de sommet, noté $p_{\star}$. Un mot \textit{valide} ne doit contenir que deux types de syllabes :}
+{\setlength{\parindent}{0pt}We consider the set\footnote{Of cardinal $n(n+m)^{\eta-1}$} of $(\eta+1)$-letter words written in the alphabet $\mathcal{E}$, beginning and ending with the same vertex name, noted $p_{\star}$. A \textit{valid} word must contain only three types of sequences :}
 \begin{itemize}
-\item{Deux lettres désignant deux éléments au bord d'une même unique face de $P$, notée $F(\square _i,\square _j)$.}
-\item{Trois lettres désignant une arêtes comprise entre ses deux extrémités.\\}
+\item{An edge crimped by its two ends.}
+\item{An edge crimped by the two opposite vertices of the triangles joined at this edge.}
+\item{A series of adjacent two by two edges (except triplets $a_{ij}a_{jk}a_{ij}$ and $a_{ij}a_{jk}a_{ki}$), preceded by the vertex opposite the first edge (but not attached to the second) and followed by the vertex opposite last edge (but not attached to the penultimate).\\}
 \end{itemize}
-À $\gamma$ correspond nécessairement un tel mot, noté $\overline{\gamma}$. Réciproquement, à un mot $x=\overline{p_{\star}l_1\dots l_{\eta-1}p_{\star}}$ correspond une quasi-géodésique simple et fermée s'il satisfait, de gauche à droite, le test suivant :
+To $\gamma$ necessarily corresponds such a word, noted $\mathcal{E}(\gamma)$. Conversely, to a word $x=\overline{p_{\star}l_1\dots l_{\eta-1}p_{\star}}$ corresponds a simple and closed quasi-geodesic if it satisfies, from left to right, the following test :
 \begin{itemize}
-\item{Premier cas : deux sommets $p_i$ et $p_j$ se suivent dans $x$. On enregistre le tracé $[p_i,p_j]$ à travers $F(p_i,p_j)$.}
-\item{Deuxième cas : la séquence $\overline{p_ia_{ij}p_j}$ a lieu dans $x$. On enregistre le tracé $[p_i,p_j]$ le long de $a_{ij}$.}
-\item{Troisième cas : deux sommets $p_i$ et $p_j$ cernent une suite $\overline{a_{i_1}\dots a_{i_k}}$ dans $x$. On développe successivement les faces adjacentes $F(p_i,a_{i_1})$, $F(a_{i_1},a_{i_2})$, $\dots$, $F(a_{i_k},p_j)$. 
+\item{First case: $\overline{p_ia_{ij}p_j}$ takes place in $x$. We save the path $[p_i,p_j]$ along $a_{ij}$.}
+\item{Second case: $\overline{p_ia_{k_1k_2}p_j}$ takes place in $x$, where $(p_i,p_{k_1},p_{k_2})$ and $(p_j,p_{k_1},p_{k_2})$ designate two adjacent triangles. We save the path $[p_i,p_j]$ through the straightening of the two triangles in question.}
+\item{Third case: two vertices $p_i$ and $p_j$ surround a sequence $\overline{a_{k_1}\dots a_{k_r}}$ in $x$. We associate with $a_{k_1}$ its two ends noted $p_{s_0},p_{s_1}$ and for $l\geq 2$, we associate with each $a_{k_l}$ the vertex $p_{s_l}$ it does not share with $a_{k_{l-1}}$. Also, we have a decreasing function $f:l\mapsto f(l)$ such that $p_{s_l}$ and $p_{s_{f(l)}}$ are the ends of $a_{k_l}$. We send the vertices $(p_i,p_{s_1},\dots , p_{k_r}p_j)$ in an oriented plane coordinate system, so that all the triangles keep their metric and their relative orientations (we assume that $0<(\overrightarrow{p_ip_{s_1}},\overrightarrow{p_ip_{s_2}})<\pi$). We endow ourselves with Boolean functions determining whether a point is located to the left (resp. the right) of an oriented line $(p_i,\overrightarrow{u})$, strictly or not: $p\mapsto (p<u)$, $p\mapsto (p\leq u)$ (resp. $p\mapsto (p>u)$, $p\mapsto (p\geq u)$). The following algorithm evaluates this syllable of $x$:\\ \\
+$u=\overrightarrow{p_ip_{k_1}}$\\
+$v=\overrightarrow{p_ip_{k_2}}$\\
+$\tau=1$\\
+For $l$ from $3$ to $r$ and as long as $\tau==1$ :
+	\begin{itemize}
+	
+	
+	\item[]{If $(p_{s_l}\leq v)$ with $(p_{s_{f(l)}}\leq v)$: then $\tau=0$.}
+	\item[]{If $(p_{s_l}\geq u)$ with $(p_{s_{f(l)}}\geq u)$: then $\tau=0$.}
+	\item[]{If $(p_{s_l}< u)$ and $(p_{s_l}> v)$:}
+	\begin{itemize}
+	\item[]{If $(p_{s_{f(l)}}\geq u)$: then $v=\overrightarrow{p_ip_{s_l}}$}
+	\item[]{If $(p_{s_{f(l)}}\leq v)$: then $u=\overrightarrow{p_ip_{s_l}}$}
+	\end{itemize}
+	\end{itemize}
+		
+		 
+If $(p_j>u)$ or $(p_j<v)$: then 	$\tau=0$.\\	
+Only if $\tau==1$, we save the path $[p_i,p_j]$ through this local pattern.\\
 
 
-%en vérifiant à chaque étape que le cône lumineux issu de $p_i$ rencontre les $a_i$ (voir figure ci-dessous). Si le dernier cône rencontre $p_j$, on enregistre le tracé $[p_i,p_j]$ à travers le développement des faces, vu comme une quasi-géodésique sur $P$. Attention : dans le cas non convexe, la construction peut échouer dès la première face.
 } 
 \end{itemize}
-Dans les trois cas :
-\begin{itemize}
+Finally, we check the angles induced by the paths saved upstream and downstream of each vertex appearing in $x$. If they satisfy the conditions of a quasi-geodesic, we can say that $x$ is the word of a quasi-geodesic.\\
 
-\item{Si $p_i=p_{\star}$, on continue le test à partir de $p_j$.}
-\item{Si $p_i\neq p_{\star}$, alors des tracés en aval et en amont de $p_i$ on été enregistrés. Le test est positif si l'angle en $p_i$ formé par ces deux tracés satisfait aux conditions d'une quasi-géodésique.}
-\item{Si $p_j=p_{\star}$, alors des tracés en aval et en amont de $p_{\star}$ on été enregistrés. Le test est positif si l'angle en $p_{\star}$ formé par ces deux tracés satisfait aux conditions d'une quasi-géodésique.}
+
+%Dans les trois cas :
+%\begin{itemize}
+
+%\item{Si $p_i=p_{\star}$, on continue le test à partir de $p_j$.}
+%\item{Si $p_i\neq p_{\star}$, alors des tracés en aval et en amont de $p_i$ on été enregistrés. Le test est positif si l'angle en $p_i$ formé par ces deux tracés satisfait aux conditions d'une quasi-géodésique.}
+%\item{Si $p_j=p_{\star}$, alors des tracés en aval et en amont de $p_{\star}$ on été enregistrés. Le test est positif si l'angle en $p_{\star}$ formé par ces deux tracés satisfait aux conditions d'une quasi-géodésique.}
 
 
 \begin{figure}[h!]
 		\begin{center}
-			\includegraphics[scale=0.29]{test}  
+			\includegraphics[scale=1]{test-secteur.png}  
 		\end{center}
 \end{figure}
 
@@ -177,59 +211,16 @@ Dans les trois cas :
 
 %mesure les deux angles $(\overrightarrow{p_jp_0},\overrightarrow{p_jp_{k_1}})$ et $(\overrightarrow{p_jp_0},\overrightarrow{p_jp_{k_1}})$ où $p_{k_1}$ et $p_{k_2}$ sont les sommets voisins de $p_j$ dans $F(p_0,p_j)$.}
 
-\end{itemize}
-L'un au moins des mots valides doit passer le test avec succès, à commencer par $\overline{\gamma}$.\\
-Ainsi, \textbf{le test fournit la construction d'une quasi-géodésique sur $P$}.\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
+%\end{itemize}
+
+{\setlength{\parindent}{0pt}At least one of the valid words must pass the test, starting with $\overline{\gamma}$.\\
+Thus, \textbf{the test provides the construction of a quasi-geodesic on $P$}}.
 \end{proof}
 
 
 
 
-\begin{definition}[Bec]
-Un bec, relativement à un chapeau $\mathcal{C}_i$, est une fibre $\beta(t,.)$ qui coupe $\partial \mathcal{C}_i$ en au moins trois temps $g_1<g_2<g_3$ tels que $\beta(t,[g_1,g_3])\subset \mathcal{C}_i$. Il est dit centré s'il enferme le sommet, excentré sinon.
-\end{definition}
-Si $\beta$ présente un bec centré d'extrémités $A'$ et $B'$ du côté de $Ap_iB$ où l'angle est plus grand que $\pi$ et s'il n'existe aucune fibre, dans la bande délimitée par $A,A',B,B'$, qui soit redressable en un plus court chemin passant par $p_i$ (comme au point 2), alors toutes les fibres à l'intérieur du bec seront redressées au-delà de $p_i$ en un plus court chemin (voir figure ci-dessous). La brèche ouverte par ce redressement sera recousu avec des fibres nécessairement plus courtes que le bec.
-\begin{figure}[h]
-		\begin{center}
-			\includegraphics[scale=0.04]{etoile-5.png}
-		\end{center}
-\end{figure}
 
-
-\textbf{Tangence}\\
-Une fibre $\gamma$ d'un chapeau peut longer une portion de son bord. Si $\gamma$ poursuit sa route à l'intérieur du chapeau, elle devrait éventuellement être redressée à partir de son premier point d'entrée dans le chapeau, de sorte qu'une brèche s'ouvrirait entre $\gamma$ et ses fibres voisines, celles en particulier qui s'accrochent au voisinage du point où $\gamma$ quitte la frontière du chapeau. La difficulté vient du fait que tous les points de la frontière du chapeau ne sont pas alors des points d'entrée ou de sortie de fibres. On propose de remplacer -- à travers une homotopie -- le paramètre de cette fibre par un intervalle fermé de taille epsilon, mis en bijection homéomorphe avec la portion du bord qui est longée. De sorte que chaque copie de $\gamma$ sera considérée comme entrant dans le chapeau au point du bord qui correspond à son paramètre. 
-
-\begin{figure}[h]
-		\begin{center}
-			\includegraphics[scale=0.04]{tangence3.png}
-		\end{center}
-\end{figure}
-
-
-
-
-
-
-
-
-
-%Bien que les $\mathcal{D}_{ij}$ ne soient pas convexes en général, on a unicité de la ligne brisée la plus courte joignant deux points de son bord. Étant donnée une fibre $\beta(t_k,.)$ du balayage, on traite indépendamment les composantes connexes de $\mathcal{D}_{ij}\cap Im(\beta(t_k,.))$. Si les extrémités d'une telle composante, sur la frontière de $\mathcal{D}_{ij}$, sont distinctes : on la fait glisser (homotopie monotone pour la longueur) vers un plus court chemin dans $\mathcal{D}_{ij}$, quitte à venir s'appuyer contre la frontière. On décrit globalement l'ensemble de ces chirurgies via une application : 
-
-%$$\begin{matrix}
-%h:&[0,1]&\times&[0,1]&\times& S^1&\longrightarrow &P\\
-%&s&&t&&u&\longmapsto&\beta^s(t,u)\\
-%\end{matrix}$$
-
-%{\setlength{\parindent}{0pt}Où $\beta^0=\beta$, $\beta^1=\beta'$ et à $t=t_k$ fixé, $h$ est l'homotopie entre $\beta(t_k,.)$ et $\beta'(t_k,.)$, la fibre redressée. 
-
-
-%\begin{figure}[h]
-%		\begin{center}
-%			\includegraphics[scale=0.36]{rectification-faces}
-%		\end{center}
-%		\caption{Rectification sur les paires}
-%\end{figure}
-%En appliquant ce redressement minimisant à toutes les fibres de $\beta$ passant par $\mathcal{D}_{ij}$, on s'expose à l'ouverture de brèches dans le balayage, dès lors qu'une composante connexe $\beta(t,.)_k$ rencontre la frontière de $\mathcal{D}_{ij}$ en d'autres points que ses extrémités, isolés ou non.  C'est pourquoi l'application $h$ n'est pas une homotopie entre $\beta$ et $\beta'$ ($\beta'$ n'est pas un balayage continu). Ces brèches peuvent être comblées en incorporant à chaque balayage $\beta^s=h(s,.,.)$, et de manière continue en $s\in[0,1]$, les fibres correspondant aux temps précédant $s$, de sorte qu'au temps $s=1$, on obtienne un balayage $\beta'$, homotope à $\beta$.
 
 
 \end{document}
