@@ -1,18 +1,14 @@
-\documentclass{article}[a4paper,11pt]
+\documentclass{report}[12pt]
 
-
-
-
-
-%\addtolength{\oddsidemargin}{-.875in}
-%\addtolength{\evensidemargin}{-.875in}
-%\addtolength{\textwidth}{1.75in}
-%\addtolength{\topmargin}{-.875in}
-%\addtolength{\textheight}{1.75in}
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
 
 \usepackage[latin1]{inputenc} % un package
 \usepackage[T1]{fontenc}
-%\usepackage[francais]{babel}
+\usepackage[francais]{babel}
 
 \usepackage{amsthm}
 \usepackage{amsmath}
@@ -23,14 +19,6 @@
 \usepackage{floatrow}
 \usepackage{enumitem}
 \usepackage[all]{xy}
-
-\def\note#1{\GenericWarning{}%
-  {AUTHOR WARNING: Unresolved annotation}%
-    {\marginpar%
-      [\hfill\llap{\textcircled{\small{$\circledcirc$}}$\!\Longrightarrow$}]%
-      {\rlap{$\Longleftarrow\!$\textcircled{\small{$\circledcirc$}}}}}%
-  \textsl{$\langle\!\langle${#1}$\rangle\!\rangle$}%
-}
 
 
 \newcommand\tab[1][0.5cm]{\hspace*{#1}}
@@ -55,59 +43,54 @@
 \theoremstyle{plain}
 \newtheorem{remark}{Remark}[section]
 
-\title{Construction of a quasi-geodesic on a piecewise-linear sphere}
+\title{Construction of a quasi-geodesic on a linear sphere by piece}
 \author{Jean Chartier}
 %\date{}
 \begin{document}
 \maketitle
 
-\note{Define a piecewise-linear sphere. How does it differ from a polytope/a polyhedron?}
 
-In 1949, Alexander Pogorelov proved the existence of a simple and closed quasi-geodesic on any convex polyhedron\footnote{We give in the appendix the proof that there does not always exist a straight quasi-geodesic on a convex polyhedron, i.e., a geodesic that forms two equal angles whenever it crosses a vertex.}. We describe an algorithm allowing to build such a quasi-geodesic on any piecewise-linear sphere, not necessarily convex neither embedded in $\mathhbb{R}^3$. We first prove the existence of a quasi-geodesic of length less than a bound depending on the geometric data of the sphere. This gives us an upper bound on the combinatorics of the quasi-geodesic and allows us to draw up a list of the paths to be tested. 
+
+In 1949, Alexandre Pogorelov proves the existence of a simple and closed quasi-geodesic on any convex polyhedron\footnote{We give in the appendix the proof that there does not always exist a straight quasi-geodesic on a convex polyhedron, that is to say if necessary, which crosses the vertices forming two equal angles.}. We propose to describe an algorithm allowing to build such a quasi-geodesic on any linear sphere by pieces, not necessarily convex. We first prove the existence of a quasi-geodesic of length less than a bound depending on a triangulation of the faces. This gives us an upper bound on the combinatorics of the quasi-geodesic (order of meeting of the vertices and edges) and allows us to draw up a list of the paths to be tested. 
 \begin{definition}[Quasi-geodesic]
-A quasi-geodesic on a piecewise linear surface $S$ is a continuous path $\gamma : \mathbb{S}^1\longrightarrow \partial S$, where $I$ is an interval of $\mathbb{R}$, satisfying four conditions :
+A quasi-geodesic on a piecewise linear surface $S$ is a continuous path $\gamma : I\longrightarrow \partial S$, where $I$ is an interval of $\mathbb{R}$, satisfying four conditions :
 \begin{itemize}
-\item{It is rectilinear in the interior of the faces $S$ that it crosses.}
-\item{When crossing the interior of an edge of $S$, $\gamma$ subdivides $S$ locally forming two equal angles (which thus equal $\pi$).}
-\item{When crossing a vertex of positive curvature, $\gamma$ subdivides $S$ locally forming two angles of value at most $\pi$.}
-\item{When crossing a vertex of positive curvature, $\gamma$ subdivides $S$ locally forming two angles of value at least $\pi$.}
+\item{It is uniform rectilinear on the faces of $ S $ that it crosses.}
+\item{It forms on the passage of an edge two angles equal to $\pi$.}
+\item{It forms on the passage of a vertex of positive curvature two angles less than or equal to $\pi$.}
+\item{IIt forms on the passage of a vertex of negative curvature two angles greater than or equal to $\pi$.}
 \end{itemize}
 \end{definition}
 
-\textbf{Notation} : Given a piecewise-linear sphere $S$ consisting of vertices $p_1,\dots,p_n$, we consider a triangulation $\mathcal{T}=\{T_1,\dots,T_l\}$ of this sphere. It is well-known that any triangulation of a $2$-sphere is \textit{shellable}, i.e. : $$\forall i=1\dots l, \bigcup_{k=1}^{k=i}T_k\simeq D^2 \text{ and }\bigcup_{k=1}^{k=l}T_k\simeq S^2.$$
-
-For a proof, we refer for example to Ziegler~\cite{ziegler}\note{Lecture on polytopes} where it is proved that any triangulation of a $2$-sphere is polytopal (Chapter~4) and that any polytope is shellable (Chapter~8).
-From now on, we can work with the combinatorics of $T$. It is immediate that a quasi-geodesic for $T$ is also a quasi-geodesic for $S$. We denote by $a_1, \dots, a_m$ the edges of this triangulation, or else if necessary, $a_{ij}$ the edge which connects the vertices $p_i$ and $p_j$\note{What does that mean?}. The union of the triangles $T_k$ having $p_i$ as a common vertex is called the \textit{hat} of $p_i$ and will be denoted by $\mathcal{C}_i$. Let us insist on the fact that $T_i$ and $T_{i+1}$ are not necessarily adjacent. Let us assume without loss of generality that $p_0\in T_1$ et $p_n\in T_l$.
+\textbf{Notation} : Given a linear sphere by piece $S$ of vertices $p_1,\dots,p_n$, we consider a triangulation $\{T_1,\dots,T_l\}$ which is based on the vertices and which be shellable\footnote{ref}, that is to say : $$\forall i=1\dots l, \bigcup_{k=1}^{k=i}T_k\simeq D^2 \text{ et }\bigcup_{k=1}^{k=l}T_k\simeq S^2$$
+From now on, we can work from the metric of $T_k$ and their combinatorics within $S$. We denote by $a_1, \dots, a_m$ the edges of this triangulation (old and new edges combined), or else if necessary, $a_{ij}$ the edge which connects the vertices $p_i$ and $p_j$. We call \textit{hat} of vertex $p_i$, denoted by $\mathcal {C}_i$, the union of the triangles $T_k$ having $p_i$ for common vertex. We specify that $T_i$ and $T_{i+1}$ are not necessarily adjacent. We optionally rename the vertices of $P$ to have $p_0\in T_1$ et $p_n\in T_l$.
 
 \begin{theorem}[Existence]
-Let $T$ be a triangulated piecewise-linear sphere. There exists a simple and closed quasi-geodesic $\gamma : \mathbb{S}^1\longrightarrow \partial P$ whose length does not exceed $M=\sum_i L(a_i)$.
+Let $S$ be a linear sphere by piece as above. There is a simple and closed quasi-geodesic $\gamma : S^1\longrightarrow \partial P$ whose length does not exceed $M=\sum_i L(a_i)$.
 %$M=\epsilon + \underset {(a,b,c)\pm P}{min}\; \underset{t\in \mathbb{R}}{max}\; L\left( \partial P\cap \{(x,y,z)\in \mathbb{R}^3 | ax+by+cz=t\}\right)$.\\
-%We can also ask, even if it means dragging $\gamma$ in parallel along the edges it crosses, that a point of $S^1$ be sent to a vertex $p_{\star}$.
+We can also ask, even if it means dragging $\gamma$ in parallel along the edges it crosses, that a point of $S^1$ be sent to a vertex $p_{\star}$.
 \end{theorem}
-
-\note{Break down the proof into 1. Definition of sweep-out, 2. Existence of sweep-out of bounded length, 3. Disk flow for curves, 4. Lemma for the disk flow for curves, 5. Disk flow for sweep-outs, 6. Lemma for the disk flow for sweep-outs and 7. Proof of the theorem.}
-
 \begin{proof}
-We start by describing a sweep-out of $T$ by simple loops, all of which are of length at most $M$. \note{Define a sweep-out} We sweep $T_1$ (resp. $T_l$) by segments $\sigma_s^1$ (resp. $\sigma_s^l$), parallel to the side opposite to $p_0$ (resp. $p_n$). Then, for $i$ from $2$ to $l-1$ :
+We start by describing a sweep of $ S $ by simple loops, bounded in length. We sweep $T_1$ (resp. $T_l$) by segments $\sigma_s^1$ (resp. $\sigma_s^l$), parallel to the side opposite to $p_0$ (resp. $p_n$). Then, for $i$ from $2$ to $l-1$ :
 \begin{itemize}
 
 \item{If $T_i$ shares a single side with $\bigcup_{k=1}^{k=i-1}T_k$, we sweep $T_i$ by segments $\sigma_s^i$ parallel to this side.}
 \item{If $T_i$ shares two sides with $\bigcup_{k=1}^{k=i-1}T_k$, we sweep $T_i$ by segments $\sigma_s^i$ parallel to the third side.}
 
 \end{itemize}
-At each segment $\sigma_s^i$ through a certain $T_i$, we continuously associate (in $s$ then in $i$) the parameterization of a loop formed by the boundary of the disc $\bigcup_{k=1}^{k=i-1}T_k$, minus its intersection with $T_i$ and connected to $\sigma_s^i$ by two portions of the edge of $T_i$ (see figure below). For $i=1$ (resp. $i=l$), we rather connect $\sigma_s^i$ to $p_0$ (resp. $p_n$) by two portions of the $T_i$'s boundary. We have thus constructed a sweep-out of $S$ by circles $\beta:S^2\longrightarrow P$ -- where $S^2$ is seen as the quotient of the cylinder $[0,1]\times S^1$ by the relation which identifies the circles $(0, S^1)$ and $(1,S^1)$ to two points -- which is of degree 1 and which satisfies:
+At each segment $\sigma_s^i$ so pulled through a certain $T_i$, we continuously associate (in $s$ then in $i$) the parameterization of a loop formed by the edge of the disc $\bigcup_{k=1}^{k=i-1}T_k$, deprived of its intersection with $T_i$ and linked to $\sigma_s^i$ by two portions of the edge of $T_i$ (see figure below). For $i=1$ (resp. $i=l$), rather we connect $\sigma_s^i$ to $p_0$ (resp. $p_n$) by two portions of the $T_i$'s boundary. We have thus constructed a sweep of $S$ by circles $\beta:S^2\longrightarrow P$ -- where $S^2$ is seen as the quotient of the cylinder $[0,1]\times S^1$ by the relation which identifies the circles $(0, S^1)$ and $(1,S^1)$ to two points -- which is of degree 1 and which satisfies:
 \begin{itemize}
-\item{Each fiber $\beta(s,.):S^1\longrightarrow P$ is a single broken line\note{undefined} on the surface of $S$.}
+\item{Each fiber $\beta(s,.):S^1\longrightarrow P$ is a single broken line on the surface of $S$.}
 \item{There is a sequence of values : $0<s_1<\dots<s_{l-1}<1$ such that $\beta([0,s_i]\times S^1)=\bigcup_{k=1}^{k=i}T_k$.}
 \item{$\beta(0,.)$ is the constant loop in $p_0$ and $\beta(1,.)$ is the constant loop in $p_n$.}
-\item{$\forall s\in]0,1[,\beta(s,.)$ is a polygon\note{undefined} of length $l_s$ drawn on $S$.}
+\item{$\forall s\in]0,1[,\beta(s,.)$ is a polygon of length $l_s$ drawed on $S$, traveled at constant speed $c_s=l_t/2\pi$.}
 \end{itemize}
 \begin{figure}[h!]
 		\begin{center}
 			\includegraphics[scale=0.8]{epluchage2}  
 		\end{center}
 \end{figure}
-Thus constructed, $\beta$ has no fiber $\beta(s,.)$ whose length does not exceed $M$.\\ \\
+Thus constructed, $\beta$ has no fiber $\beta(s,.)$ Whose length does not exceed $M$.\\ \\
 From now on, we can distinguish between the hats \textit{convex} - for which the sum of the angles adjacent to $p_i$ is less than $2\pi$ - and \textit{concave} - for which the sum of the adjacent angles to $p_i$ is greater than $2\pi $.\\
 
 
@@ -123,15 +106,21 @@ The different cases to be treated depend on the following three criteria:
 \textbf{Case 1 -} We treat the case where no fiber $\beta(t,.)$ is included in $\mathcal{C}_i$, no beak crosses $\mathcal{C}_i$, with $\mathcal{C}_i$ convex.
 We test one of the fibers passing through $p_i$ (there may be a bunch). We denote by $\gamma_p$ this fiber and $A,B$ its entry and exit points of $\mathcal{C}_i$. The broken line$Ap_iB$ split $\mathcal{C}_i$ in two quarters $\mathcal{C}_i^l$ and $\mathcal{C}_i^r$.
 \begin{itemize}
-\item{If the two angles\footnote{\textbf{All zenith projections are color coded for the angles :\\ $\leq \pi$ $\longrightarrow$ green | $> \pi$ $\longrightarrow$ blue | $=\pi$ $\longrightarrow$ purple}} formed by $Ap_iB$ are $\leq \pi$, then $\gamma_p$ is straightened out $Ap_iB$, via a decreasing homotopy for the length. Therefore and in the same homotopy ballet, all the other fibers of $\mathcal{C}_i$ can be straightened on a shorter path in $\mathcal{C}_i$, on the side of $Ap_iB$ where they take roots, namely $\mathcal{C}_i^l$ or $\mathcal{C}_i^r$. Remember that no fiber up to now has been cut transversely. Note: a hat is not necessarily convex -- it is at least starred --, then the shortest path between two point of its boundary can come to rest against it.}
+\item{If the two angles\footnote{\textbf{All zenith projections are color coded for the angles :\\ $\leq \pi$ $\longrightarrow$ green | $> \pi$ $\longrightarrow$ blue | $=\pi$ $\longrightarrow$ purple}} formed by $Ap_iB$ are $\leq \pi$, then $\gamma_p$ is straightened out $Ap_iB$, via a decreasing homotopy for the length. Therefore and in the same homotopy ballet, all the other fibers of $\mathcal{C}_i$ can be straightened on a shorter path in $\mathcal{C}_i$, on the side of $Ap_iB$ where they take roots, namely $\mathcal{C}_i^l$ or $\mathcal{C}_i^r$. Remember that no fiber up to now has been cut transversely. Note: a hat is not necessarily convex -- it is at least starred --, then the shortest path between two point of its boundary can come to rest against it. Note that this recovery is not continuous in $\gamma_p$. If $\gamma_p$ is a part of $\beta(s,.)$, we replace $s$ by a closed interval which parameterize a wreath of new fibers, coinciding with $\beta(s,.)$ outside $\mathcal{C}_i$ and weaving the gaps between $\beta(s^-,.)$ and $Ap_iB$ in one hand (side $\mathcal{C}_i^l$), between $Ap_iB$ and $\beta(s^+,.)$ on the other hand (side $\mathcal{C}_i^r$).}
 
 \begin{figure}[h!]
 		\begin{center}
 			\includegraphics[scale=0.23]{chapeau-1et2}  
 		\end{center}
 \end{figure}
-\item{If the angle formed by $Ap_iB$ on the side of $\mathcal{C}_i^l$ (resp. $\mathcal{C}_i^r$) is $>\pi$ (necessarily, the other will be $<\pi$), we are looking for a fiber $\gamma_l$ (resp. $\gamma_r)$ which can be straightened in $\mathcal{C}_i^l$ (resp. $\mathcal{C}_i^r$) passing through $p_i$, to form an angle equal to $\pi$: it realizes on this side of $Ap_iB$ a shorter path. Therefore, we straighten all the fibers of $\mathcal{C}_i$ on either side of $\gamma_l$ (resp. $\gamma_r)$, as before.}
-\tab
+\item{If the angle formed by $Ap_iB$ on the side of $\mathcal{C}_i^{\ell}$ (resp. $\mathcal{C}_i^r$) is $>\pi$ (necessarily, the other will be $<\pi$), we are looking for a fiber $\gamma_l$ (resp. $\gamma_r)$ which can be straightened in $\mathcal{C}_i^{\ell}$ (resp. $\mathcal{C}_i^r$) passing through $p_i$, to form an angle equal to $\pi$: it realizes on this side of $Ap_iB$ a shorter path. Therefore, we straighten all the fibers of $\mathcal{C}_i$ on either side of $\gamma_{\ell}$ (resp. $\gamma_r)$, as before. This search for $\gamma_{\ell} $ (for example), following the edge of $\mathcal{C}_i^{\ell}$ from $A$ and $B$, may be compromised by the presence of a beak or a fiber pressed against the border of the hat, whose roots $A'$ and $B'$ would induce an angle $A'p_iB'$ still too large on this side. This pathological fiber cannot be straightened on the other side of $p_i$, we propose ... The new fiber passing through $p_i$ is certainly not a quasi-geodesic, but at least it was not fixed by the flow.}
+\end{itemize}
+
+\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[scale=0.08]{chapeaux3et4}  
+		\end{center}
+\end{figure}
 
 \textbf{Case 2 -} We treat the case where no fiber $\beta(t,.)$ is included in $\mathcal{C}_i$, no beak crosses $\mathcal{C}_i$, with $\mathcal{C}_i$ concave.
 We test one of the fibers passing through $p_i$, by taking the previous notations.
@@ -145,8 +134,7 @@ We test one of the fibers passing through $p_i$, by taking the previous notation
 %\end{figure}
 %\item{If the angle formed by $Ap_iB$ on the side of $\mathcal{C}_i^l$ (resp. $\mathcal{C}_i^r$) is $>\pi$ (necessarily, the other will be $<\pi$), we are looking for a fiber $\gamma_l$ (resp. $\gamma_r)$ which can be straightened in $\mathcal{C}_i^l$ (resp. $\mathcal{C}_i^r$) passing through $p_i$, to form an angle equal to $\pi$: it realizes on this side of $Ap_iB$ a shorter path. Therefore, we straighten all the fibers of $\mathcal{C}_i$ on either side of $\gamma_l$ (resp. $\gamma_r)$, as before.}
 
-\end{itemize}
-Attention, the presence of a beak, in this district of $\mathcal{C}_i$ can compromise the existence of such a fiber.
+
 \end{proof}
 
 
